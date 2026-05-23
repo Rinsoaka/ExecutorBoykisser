@@ -11,37 +11,61 @@ A .NET 8.0 WPF Roblox Lua executor UI with Monaco editor, Velocity API integrati
 - Output panel with color-coded logs
 - Self-contained Windows executable
 
-## Prerequisites
+---
 
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (for building)
-- [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) (installed by default on Windows 11)
-- [Velocity Executor](https://velocity.com.de/) (for the real `VelocityAPI.dll`)
-- Windows 10/11 64-bit (for running the app)
+## Windows
 
-## Building
+### Prerequisites
 
-### On Linux (cross-compile)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) (preinstalled on Windows 11)
+- [Velocity Executor](https://velocity.com.de/) (for `VelocityAPI.dll`)
+- Windows 10/11 64-bit
+
+### Setup
+
+1. Delete `VelocityAPI.cs` (stub)
+2. Get the real `VelocityAPI.dll` from Velocity Executor
+3. Add a reference in `Executor.Wpf.csproj`:
+   ```xml
+   <Reference Include="VelocityAPI">
+     <HintPath>path\to\VelocityAPI.dll</HintPath>
+   </Reference>
+   ```
+4. Build:
+   ```cmd
+   dotnet build -c Release --runtime win-x64
+   ```
+5. Publish:
+   ```cmd
+   dotnet publish -c Release --runtime win-x64
+   ```
+6. Run `bin\Release\net8.0-windows\win-x64\publish\BoykisserExecutor.exe` as **Administrator**
+
+### Usage
+
+1. Launch Roblox and join a game
+2. Open BoykisserExecutor.exe as Administrator
+3. Click **Inject** — attaches to Roblox
+4. Type/paste a Lua script
+5. Click **Execute** — runs the script
+
+---
+
+## Linux (cross-compile)
+
+### Prerequisites
+
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+
+### Build
 
 ```bash
 cd ExecutorBoykisser
 dotnet build -c Release --runtime win-x64
 ```
 
-### On Windows (with real VelocityAPI.dll)
-
-1. Delete `VelocityAPI.cs` stub
-2. Add a reference to the real `VelocityAPI.dll` in `Executor.Wpf.csproj`:
-   ```xml
-   <Reference Include="VelocityAPI">
-     <HintPath>path\to\VelocityAPI.dll</HintPath>
-   </Reference>
-   ```
-3. Build:
-   ```bash
-   dotnet build -c Release --runtime win-x64
-   ```
-
-## Publishing (self-contained .exe)
+### Publish
 
 ```bash
 dotnet publish -c Release --runtime win-x64
@@ -49,16 +73,15 @@ dotnet publish -c Release --runtime win-x64
 
 Output: `bin/Release/net8.0-windows/win-x64/publish/BoykisserExecutor.exe`
 
-## Setup & Usage
+> Cross-compilation requires `<EnableWindowsTargeting>true</EnableWindowsTargeting>` in `.csproj` (already configured).
 
-1. **Install WebView2 Runtime** if not already present (Windows 11 has it built-in)
-2. **Launch Roblox** and join any game
-3. **Run BoykisserExecutor.exe** as administrator (required for injection)
-4. **Click Inject** — attaches to the Roblox process
-5. Type or paste a Lua script in the editor
-6. **Click Execute** — runs the script in Roblox
+### Transfer to Windows
 
-### Toolbar
+Copy the `publish/` folder to a Windows machine. The `.exe` is self-contained (no .NET runtime needed).
+
+---
+
+## Toolbar
 
 | Button     | Action                                    |
 |------------|-------------------------------------------|
@@ -68,20 +91,6 @@ Output: `bin/Release/net8.0-windows/win-x64/publish/BoykisserExecutor.exe`
 | 📂 Open    | Open a .lua file                         |
 | 💾 Save    | Save current script                      |
 | Save As    | Save to a new file                       |
-
-### Script Tabs
-
-- Click **+** in the sidebar to create a new script tab
-- Click a tab to switch between scripts
-- A filled circle (●) indicates unsaved changes
-
-### Output Panel
-
-Displays log messages with color coding:
-- **Blue** — info / status
-- **Green** — success
-- **Red** — errors
-- **Yellow** — warnings
 
 ## Project Structure
 
@@ -101,6 +110,5 @@ ExecutorBoykisser/
 
 ## Notes
 
-- WPF cross-compilation from Linux requires `<EnableWindowsTargeting>true</EnableWindowsTargeting>` in `.csproj`
 - The stub `VelocityAPI.cs` provides empty implementations — replace it with the real `VelocityAPI.dll` for actual injection/execution
 - Use a secondary Roblox account for safety
