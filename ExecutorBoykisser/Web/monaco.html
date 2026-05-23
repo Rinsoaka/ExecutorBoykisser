@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>*{margin:0;padding:0}body{background:#0d1117;overflow:hidden}#c{width:100vw;height:100vh}</style></head>
+<body><div id="c"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+require.config({paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs'}});
+require(['vs/editor/editor.main'],function(){
+window.editor=monaco.editor.create(document.getElementById('c'),{
+value:'-- Welcome to Boykisser Executor\n-- Powered by Velocity API\n\nprint("Hello, Roblox!")',
+language:'lua',theme:'vs-dark',fontSize:14,fontFamily:'Consolas, "Fira Code", monospace',
+lineNumbers:'on',minimap:{enabled:true},scrollBeyondLastLine:false,automaticLayout:true,
+tabSize:2,wordWrap:'on',smoothScrolling:true,cursorBlinking:'smooth',bracketPairColorization:{enabled:true}});
+monaco.languages.registerCompletionItemProvider('lua',{triggerCharacters:['.',':','('],
+provideCompletionItems:function(m,p){var w=m.getWordUntilPosition(p);var r={startLineNumber:p.lineNumber,endLineNumber:p.lineNumber,startColumn:w.startColumn,endColumn:w.endColumn};
+var s=[];
+['print','warn','error','typeof','type','select','pairs','ipairs','next','rawget','rawset','rawlen','setmetatable','getmetatable','tostring','tonumber','unpack','pcall','xpcall','require','dofile','loadfile','load','assert','error','collectgarbage','rawequal'].forEach(function(f){
+s.push({label:f,kind:monaco.languages.CompletionItemKind.Function,insertText:f+'(${1})',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range:r})});
+['true','false','nil','...'].forEach(function(k){s.push({label:k,kind:monaco.languages.CompletionItemKind.Keyword,insertText:k,range:r})});
+['while','for','repeat','if','elseif','else','do','end','function','local','return','break','until','then','in'].forEach(function(k){s.push({label:k,kind:monaco.languages.CompletionItemKind.Snippet,insertText:k+' ',range:r})});
+s.push({label:'function',kind:monaco.languages.CompletionItemKind.Snippet,insertText:'function ${1:name}(${2:args})\n\t${3}\nend',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range:r});
+s.push({label:'for',kind:monaco.languages.CompletionItemKind.Snippet,insertText:'for ${1:i}=${2:1},${3:10} do\n\t${4}\nend',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range:r});
+s.push({label:'if',kind:monaco.languages.CompletionItemKind.Snippet,insertText:'if ${1:condition} then\n\t${2}\nend',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range:r});
+['game','workspace','script','Instance','Vector3','CFrame','Color3','UDim2','TweenInfo','Ray','Region3','NumberSequence','NumberRange','BrickColor','Axes','Faces','Random','DateTime'].forEach(function(c){s.push({label:c,kind:monaco.languages.CompletionItemKind.Class,insertText:c,range:r})});
+['FireServer','FireAllClients','InvokeServer','FindFirstChild','FindFirstChildOfClass','GetChildren','GetDescendants','Destroy','Clone','Remove','ClearAllChildren','Connect','Wait','TweenSize','TweenPosition','lerp','Cross','Inverse','lookVector','Angles','fromEulerAnglesXYZ','new','random','Lerp'].forEach(function(m){s.push({label:m,kind:monaco.languages.CompletionItemKind.Method,insertText:m+'(${1})',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range:r})});
+['Parent','Name','ClassName','Position','Size','Color','Transparency','Material','Anchored','CanCollide','Locked','Value','CFrame','Orientation','Velocity','Brightness','Enabled','Text','Visible'].forEach(function(p){s.push({label:p,kind:monaco.languages.CompletionItemKind.Property,insertText:p,range:r})});
+return{suggestions:s}}});
+window.setCode=function(c){window.editor.setValue(c);window.editor.getModel().pushStackElement()};
+window.getCode=function(){return window.editor.getValue()};
+window.editor.focus();});
+</script></body></html>
