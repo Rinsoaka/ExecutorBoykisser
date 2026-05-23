@@ -1,6 +1,6 @@
 # Boykisser Executor
 
-A .NET 8.0 WPF Roblox Lua executor UI with Monaco editor, Velocity API integration.
+A .NET 8.0 WPF Roblox Lua executor UI with Monaco editor and DLL injection via named pipe IPC.
 
 ## Features
 
@@ -93,7 +93,7 @@ ExecutorBoykisser/
 ├── Executor.Wpf.csproj    — project file
 ├── App.xaml / App.xaml.cs  — application entry
 ├── MainWindow.xaml         — UI layout
-├── MainWindow.xaml.cs      — all logic (Monaco, VelAPI, files)
+├── MainWindow.xaml.cs      — all logic (Monaco, injector, files)
 ├── Injector.cs             — DLL injection + named pipe IPC
 ├── ExecutorDLL/            — C++ DLL template (open in VS2022)
 │   ├── ExecutorDLL.sln

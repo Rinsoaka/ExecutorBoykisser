@@ -6,7 +6,7 @@
 require.config({paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs'}});
 require(['vs/editor/editor.main'],function(){
 window.editor=monaco.editor.create(document.getElementById('c'),{
-value:'-- Welcome to Boykisser Executor\n-- Powered by Velocity API\n\nprint("Hello, Roblox!")',
+value:'-- Welcome to Boykisser Executor\n-- Type your script here\n\nprint("Hello, Roblox!")',
 language:'lua',theme:'vs-dark',fontSize:14,fontFamily:'Consolas, "Fira Code", monospace',
 lineNumbers:'on',minimap:{enabled:true},scrollBeyondLastLine:false,automaticLayout:true,
 tabSize:2,wordWrap:'on',smoothScrolling:true,cursorBlinking:'smooth',bracketPairColorization:{enabled:true}});
