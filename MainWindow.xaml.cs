@@ -42,6 +42,8 @@ public partial class MainWindow : Window
             Log("Boykisser Executor — DLL Injector Edition", "#58a6ff");
             Log("Ready. Select executor DLL and inject into Roblox.", "#58a6ff");
         };
+
+        Closing += (_, _) => _injector.Dispose();
     }
 
     private async Task InitializeMonaco()

@@ -22,6 +22,8 @@ public class Injector : IDisposable
         if (!File.Exists(dllPath))
             throw new FileNotFoundException("Executor DLL not found", dllPath);
 
+        Uninject();
+
         using var process = System.Diagnostics.Process.GetProcessById(pid);
         var handle = process.Handle;
 
@@ -40,11 +42,23 @@ public class Injector : IDisposable
         if (thread == IntPtr.Zero)
             throw new Exception("CreateRemoteThread failed");
 
-        _pipeServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 1,
-            PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-        _ = WaitForPipeConnectionAsync();
-        _injected = true;
-        return true;
+        for (var attempt = 0; attempt < 3; attempt++)
+        {
+            try
+            {
+                _pipeServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut,
+                    NamedPipeServerStream.MaxAllowedServerInstances,
+                    PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+                _ = WaitForPipeConnectionAsync();
+                _injected = true;
+                return true;
+            }
+            catch (IOException) when (attempt < 2)
+            {
+                System.Threading.Thread.Sleep(500);
+            }
+        }
+        throw new Exception("Failed to create named pipe — all instances busy. Close any other instances and try again.");
     }
 
     public bool Uninject()
