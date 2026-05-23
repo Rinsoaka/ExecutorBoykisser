@@ -95,12 +95,26 @@ ExecutorBoykisser/
 ├── MainWindow.xaml         — UI layout
 ├── MainWindow.xaml.cs      — all logic (Monaco, VelAPI, files)
 ├── Injector.cs             — DLL injection + named pipe IPC
+├── ExecutorDLL/            — C++ DLL template (open in VS2022)
+│   ├── ExecutorDLL.sln
+│   ├── ExecutorDLL.vcxproj
+│   └── dllmain.cpp         — pipe listener + your Lua logic placeholder
 ├── AssemblyInfo.cs         — WPF theme info
 ├── .gitignore
 ├── README.md
 └── Web/
     └── monaco.html         — Monaco editor HTML (embedded resource)
 ```
+
+## Building Your Executor DLL
+
+Open `ExecutorDLL/ExecutorDLL.sln` in Visual Studio 2022, build for **x64**, and inject the resulting `.dll` via the C# app.
+
+The template:
+- Opens a console in the target process for debugging
+- Connects to `\\.\pipe\BoykisserExecutor`
+- Listens for scripts from the C# app
+- Calls `ExecuteLua()` — **you fill in the Roblox Lua execution logic**
 
 ## Notes
 
