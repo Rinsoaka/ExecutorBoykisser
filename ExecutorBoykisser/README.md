@@ -23,7 +23,7 @@ A .NET 8.0 WPF Roblox Lua executor UI with Monaco editor, Velocity API integrati
 ### On Linux (cross-compile)
 
 ```bash
-cd "Executor Boykisser/Executor.Wpf"
+cd ExecutorBoykisser
 dotnet build -c Release --runtime win-x64
 ```
 
@@ -47,7 +47,7 @@ dotnet build -c Release --runtime win-x64
 dotnet publish -c Release --runtime win-x64
 ```
 
-Output: `Executor.Wpf/bin/Release/net8.0-windows/win-x64/publish/BoykisserExecutor.exe`
+Output: `bin/Release/net8.0-windows/win-x64/publish/BoykisserExecutor.exe`
 
 ## Setup & Usage
 
@@ -86,17 +86,17 @@ Displays log messages with color coding:
 ## Project Structure
 
 ```
-Executor Boykisser/
-├── Executor.Wpf/
-│   ├── Executor.Wpf.csproj    — project file
-│   ├── App.xaml / App.xaml.cs  — application entry
-│   ├── MainWindow.xaml         — UI layout
-│   ├── MainWindow.xaml.cs      — all logic (Monaco, VelAPI, files)
-│   ├── VelocityAPI.cs          — stub (delete on Windows, use real DLL)
-│   ├── AssemblyInfo.cs         — WPF theme info
-│   └── Web/
-│       └── monaco.html         — Monaco editor HTML (embedded resource)
-└── README.md
+ExecutorBoykisser/
+├── Executor.Wpf.csproj    — project file
+├── App.xaml / App.xaml.cs  — application entry
+├── MainWindow.xaml         — UI layout
+├── MainWindow.xaml.cs      — all logic (Monaco, VelAPI, files)
+├── VelocityAPI.cs          — stub (delete on Windows, use real DLL)
+├── AssemblyInfo.cs         — WPF theme info
+├── .gitignore
+├── README.md
+└── Web/
+    └── monaco.html         — Monaco editor HTML (embedded resource)
 ```
 
 ## Notes
