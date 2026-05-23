@@ -1,8 +1,8 @@
+#define UNICODE
+#define _UNICODE
 #include <windows.h>
-#include <iostream>
 #include <string>
 #include <thread>
-#include <vector>
 
 HANDLE g_pipe = INVALID_HANDLE_VALUE;
 bool g_running = false;
@@ -10,24 +10,16 @@ bool g_running = false;
 void OpenConsole()
 {
     AllocConsole();
-    SetConsoleTitle(L"Boykisser Executor DLL");
+    SetConsoleTitleW(L"Boykisser Executor DLL");
     FILE* f;
-    freopen_s(&f, "CONOUT$", "w", stdout);
-    freopen_s(&f, "CONIN$", "r", stdin);
-    std::cout << "[Executor DLL] Loaded into target process." << std::endl;
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONIN$", "r", stdin);
 }
 
 void ExecuteLua(const std::string& script)
 {
     // TODO: Replace with your Lua execution logic
-    // This is where you call Roblox's internal Lua VM
-    //
-    // Example approaches:
-    // 1. Find rbx::lua::State or similar in Roblox's binary
-    // 2. Write bytecode to a Roblox core module
-    // 3. Use a custom Lua interpreter embedded in the DLL
-    //
-    // std::cout << "[Executor DLL] Executing: " << script << std::endl;
+    // This is called when a script arrives from the C# app via named pipe.
 }
 
 void PipeListener()
@@ -45,8 +37,6 @@ void PipeListener()
             continue;
         }
 
-        std::cout << "[Executor DLL] Connected to pipe." << std::endl;
-
         char buffer[65536];
         DWORD bytesRead;
 
@@ -56,7 +46,6 @@ void PipeListener()
             {
                 buffer[bytesRead] = '\0';
                 std::string script(buffer, bytesRead);
-                std::cout << "[Executor DLL] Received script (" << script.size() << " chars)" << std::endl;
                 ExecuteLua(script);
             }
             else
@@ -67,7 +56,6 @@ void PipeListener()
 
         CloseHandle(g_pipe);
         g_pipe = INVALID_HANDLE_VALUE;
-        std::cout << "[Executor DLL] Pipe disconnected." << std::endl;
     }
 }
 
