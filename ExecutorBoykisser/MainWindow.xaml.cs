@@ -10,7 +10,6 @@ using System.Windows.Media;
 using Microsoft.Win32;
 using Microsoft.Web.WebView2.Core;
 using Newtonsoft.Json;
-using VelocityAPI;
 
 namespace BoykisserExecutor;
 
@@ -18,12 +17,13 @@ public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ScriptTab> _tabs = new()
     {
-        new ScriptTab("Untitled.lua", "-- Welcome to Boykisser Executor\n-- Powered by Velocity API\n\nprint(\"Hello, Roblox!\")"),
+        new ScriptTab("Untitled.lua", "-- Welcome to Boykisser Executor\n\nprint(\"Hello, Roblox!\")"),
     };
 
     private int _activeIndex;
     private string? _currentFilePath;
-    public VelAPI Velocity = new();
+    private readonly Injector _injector = new();
+    private string? _executorDllPath;
     private bool _isInjected;
     private bool _webViewInitialized;
     private readonly ObservableCollection<OutputLine> _outputLines = new();
@@ -39,8 +39,8 @@ public partial class MainWindow : Window
             await InitializeMonaco();
             RefreshTabList();
             UpdateTitle();
-            Log("AI Executor v2.0 — Velocity API Edition", "#58a6ff");
-            Log("Ready. Inject into Roblox to get started.", "#58a6ff");
+            Log("Boykisser Executor — DLL Injector Edition", "#58a6ff");
+            Log("Ready. Select executor DLL and inject into Roblox.", "#58a6ff");
         };
     }
 
@@ -206,16 +206,26 @@ public partial class MainWindow : Window
     {
         if (_isInjected)
         {
-            Velocity.StopCommunication();
+            _injector.Uninject();
             _isInjected = false;
             UpdateInjectButton();
             Log("Uninjected from Roblox", "#d29922");
             return;
         }
 
+        if (string.IsNullOrEmpty(_executorDllPath))
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Select executor DLL to inject",
+                Filter = "DLL Files (*.dll)|*.dll"
+            };
+            if (dialog.ShowDialog() != true) return;
+            _executorDllPath = dialog.FileName;
+        }
+
         try
         {
-            Velocity.StartCommunication();
             var pids = System.Diagnostics.Process.GetProcessesByName("RobloxPlayerBeta");
             if (pids.Length == 0)
                 pids = System.Diagnostics.Process.GetProcessesByName("Roblox");
@@ -226,10 +236,10 @@ public partial class MainWindow : Window
                 return;
             }
 
-            await Velocity.Attach(pids[0].Id);
+            _injector.InjectRoblox(_executorDllPath, pids[0].Id);
             _isInjected = true;
             UpdateInjectButton();
-            Log($"Injected into Roblox (PID: {pids[0].Id})", "#3fb950");
+            Log($"Injected {Path.GetFileName(_executorDllPath)} into Roblox (PID: {pids[0].Id})", "#3fb950");
         }
         catch (Exception ex)
         {
@@ -257,10 +267,8 @@ public partial class MainWindow : Window
 
         try
         {
-            var result = Velocity.Execute(code);
-            Log(result == VelocityStates.Executed
-                ? "Script executed successfully"
-                : $"Execute returned: {result}", "#3fb950");
+            var success = await _injector.ExecuteAsync(code);
+            Log(success ? "Script executed successfully" : "Execute failed — pipe not connected", "#3fb950");
         }
         catch (Exception ex)
         {

@@ -6,7 +6,7 @@ A .NET 8.0 WPF Roblox Lua executor UI with Monaco editor, Velocity API integrati
 
 - Monaco code editor with Lua syntax highlighting and autocomplete
 - Script tab management (new, open, save, save as)
-- Velocity API inject/execute integration
+- DLL injection + named pipe IPC for script execution
 - Dark theme (GitHub Dark-inspired)
 - Output panel with color-coded logs
 - Self-contained Windows executable
@@ -19,36 +19,30 @@ A .NET 8.0 WPF Roblox Lua executor UI with Monaco editor, Velocity API integrati
 
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) (preinstalled on Windows 11)
-- [Velocity Executor](https://velocity.com.de/) (for `VelocityAPI.dll`)
+- Your own executor DLL (to inject into Roblox)
 - Windows 10/11 64-bit
 
-### Setup
+### Build
 
-1. Delete `VelocityAPI.cs` (stub)
-2. Get the real `VelocityAPI.dll` from Velocity Executor
-3. Add a reference in `Executor.Wpf.csproj`:
-   ```xml
-   <Reference Include="VelocityAPI">
-     <HintPath>path\to\VelocityAPI.dll</HintPath>
-   </Reference>
-   ```
-4. Build:
-   ```cmd
-   dotnet build -c Release --runtime win-x64
-   ```
-5. Publish:
-   ```cmd
-   dotnet publish -c Release --runtime win-x64
-   ```
-6. Run `bin\Release\net8.0-windows\win-x64\publish\BoykisserExecutor.exe` as **Administrator**
+```cmd
+dotnet build -c Release --runtime win-x64
+```
+
+### Publish
+
+```cmd
+dotnet publish -c Release --runtime win-x64
+```
+
+Output: `bin\Release\net8.0-windows\win-x64\publish\BoykisserExecutor.exe`
 
 ### Usage
 
 1. Launch Roblox and join a game
-2. Open BoykisserExecutor.exe as Administrator
-3. Click **Inject** — attaches to Roblox
-4. Type/paste a Lua script
-5. Click **Execute** — runs the script
+2. Run `BoykisserExecutor.exe` as **Administrator**
+3. Click **Inject** — pick your executor `.dll` file
+4. Type/paste a Lua script in the editor
+5. Click **Execute** — sends script via named pipe (`\\.\pipe\BoykisserExecutor`) to your injected DLL
 
 ---
 
@@ -100,7 +94,7 @@ ExecutorBoykisser/
 ├── App.xaml / App.xaml.cs  — application entry
 ├── MainWindow.xaml         — UI layout
 ├── MainWindow.xaml.cs      — all logic (Monaco, VelAPI, files)
-├── VelocityAPI.cs          — stub (delete on Windows, use real DLL)
+├── Injector.cs             — DLL injection + named pipe IPC
 ├── AssemblyInfo.cs         — WPF theme info
 ├── .gitignore
 ├── README.md
@@ -110,5 +104,6 @@ ExecutorBoykisser/
 
 ## Notes
 
-- The stub `VelocityAPI.cs` provides empty implementations — replace it with the real `VelocityAPI.dll` for actual injection/execution
+- Your executor DLL must connect to the named pipe `\\.\pipe\BoykisserExecutor` to receive scripts
+- Windows Defender may flag the injector — it uses `CreateRemoteThread` which is a normal injection technique
 - Use a secondary Roblox account for safety
