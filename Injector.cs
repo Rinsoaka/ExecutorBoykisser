@@ -58,7 +58,7 @@ public class Injector : IDisposable
                 System.Threading.Thread.Sleep(500);
             }
         }
-        throw new Exception("Failed to create named pipe — all instances busy. Close any other instances and try again.");
+        throw new Exception("Failed to create named pipe - all instances busy. Close any other instances and try again.");
     }
 
     public bool Uninject()

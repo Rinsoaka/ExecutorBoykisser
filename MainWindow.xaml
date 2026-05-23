@@ -108,16 +108,16 @@
         <Border Grid.Row="0" Background="#161b22" BorderBrush="#30363d" BorderThickness="0,0,0,1">
             <Grid>
                 <StackPanel Orientation="Horizontal" Margin="12,0" VerticalAlignment="Center">
-                    <TextBlock Text="âœ¦" Foreground="#d29922" FontSize="16" Margin="0,0,8,0" />
+                    <TextBlock Text="[+]" Foreground="#d29922" FontSize="14" Margin="0,0,8,0" />
                     <TextBlock Text="Boykisser Executor" Foreground="#8b949e" FontSize="13" VerticalAlignment="Center" />
                     <TextBlock Text="|" Foreground="#30363d" Margin="8,0" VerticalAlignment="Center" />
                     <Ellipse x:Name="BridgeDot" Width="8" Height="8" Fill="#3fb950" Margin="0,0,6,0" VerticalAlignment="Center" />
                     <TextBlock x:Name="BridgeLabel" Text="Ready" Foreground="#3fb950" FontSize="11" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,4,0">
-                    <Button x:Name="MinimizeBtn" Content="â”€" Style="{StaticResource TitlebarBtn}" Click="Minimize_Click" />
-                    <Button x:Name="MaximizeBtn" Content="â–¡" Style="{StaticResource TitlebarBtn}" Click="Maximize_Click" />
-                    <Button x:Name="CloseBtn" Content="âœ•" Style="{StaticResource TitlebarBtn}" Click="Close_Click" />
+                    <Button x:Name="MinimizeBtn" Content="_" Style="{StaticResource TitlebarBtn}" Click="Minimize_Click" />
+                    <Button x:Name="MaximizeBtn" Content="[]" Style="{StaticResource TitlebarBtn}" Click="Maximize_Click" />
+                    <Button x:Name="CloseBtn" Content="X" Style="{StaticResource TitlebarBtn}" Click="Close_Click" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -164,16 +164,16 @@
                 <!-- Toolbar -->
                 <Border Grid.Row="0" Background="#161b22" BorderBrush="#30363d" BorderThickness="0,0,0,1">
                     <StackPanel Orientation="Horizontal" Margin="8,0">
-                        <Button x:Name="InjectBtn" Content="âš¡ Inject" Style="{StaticResource ToolbarBtn}"
+                        <Button x:Name="InjectBtn" Content="[INJECT]" Style="{StaticResource ToolbarBtn}"
                                 Background="#1a3a2a" BorderBrush="#2d5a3e" Foreground="#3fb950" Click="Inject_Click" />
-                        <Button x:Name="ExecuteBtn" Content="â–¶ Execute" Style="{StaticResource ToolbarBtn}"
+                        <Button x:Name="ExecuteBtn" Content="[EXECUTE]" Style="{StaticResource ToolbarBtn}"
                                 Margin="6,0,0,0" Background="#3a2e1a" BorderBrush="#5a4a2d" Foreground="#d29922" Click="Execute_Click" />
-                        <Button x:Name="ClearBtn" Content="âŒ« Clear" Style="{StaticResource ToolbarBtn}" Margin="6,0,0,0" Click="Clear_Click" />
+                        <Button x:Name="ClearBtn" Content="[CLEAR]" Style="{StaticResource ToolbarBtn}" Margin="6,0,0,0" Click="Clear_Click" />
                         <Rectangle Width="1" Fill="#30363d" Margin="8,4" />
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,8,0">
-                            <Button x:Name="OpenBtn" Content="ðŸ“‚ Open" Style="{StaticResource ToolbarBtn}" Click="Open_Click" />
-                            <Button x:Name="SaveBtn" Content="ðŸ’¾ Save" Style="{StaticResource ToolbarBtn}" Margin="6,0,0,0" Click="Save_Click" />
+                            <Button x:Name="OpenBtn" Content="[OPEN]" Style="{StaticResource ToolbarBtn}" Click="Open_Click" />
+                            <Button x:Name="SaveBtn" Content="[SAVE]" Style="{StaticResource ToolbarBtn}" Margin="6,0,0,0" Click="Save_Click" />
                             <Button x:Name="SaveAsBtn" Content="Save As" Style="{StaticResource ToolbarBtn}" Margin="6,0,0,0" Click="SaveAs_Click" />
                         </StackPanel>
                     </StackPanel>
